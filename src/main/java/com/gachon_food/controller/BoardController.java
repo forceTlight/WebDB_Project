@@ -9,18 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/board")
 public class BoardController {
-
     @Autowired
     private BoardRepository boardRepository;
 
@@ -61,5 +59,46 @@ public class BoardController {
         }
         boardRepository.save(board);
         return "redirect:/board/list";
+    }
+    @GetMapping("/boards")
+    List<Board> all(@RequestParam(required = false, defaultValue = "") String title,
+                    @RequestParam(required = false, defaultValue = "") String content) {
+        if(StringUtils.isEmpty(title) && StringUtils.isEmpty(content)){
+            return boardRepository.findAll();
+        }else{
+            return boardRepository.findByTitleOrContent(title, content);
+        }
+    }
+    // end::get-aggregate-root[]
+
+    @PostMapping("/boards")
+    Board newBoard(@RequestBody Board newBoard) {
+        return boardRepository.save(newBoard);
+    }
+
+    // Single item
+
+    @GetMapping("/boards/{id}")
+    Board one(@PathVariable Integer id) {
+        return boardRepository.findById(id).orElse(null);
+    }
+
+    @PutMapping("/boards/{id}")
+    Board replaceBoard(@RequestBody Board newBoard, @PathVariable Integer id) {
+        return boardRepository.findById(id)
+                .map(board -> {
+                    board.setTitle(newBoard.getTitle());
+                    board.setContent(newBoard.getContent());
+                    return boardRepository.save(board);
+                })
+                .orElseGet(() -> {
+                    newBoard.setBoardId(id);
+                    return boardRepository.save(newBoard);
+                });
+    }
+
+    @DeleteMapping("/boards/{id}")
+    void deleteBoard(@PathVariable Integer id) {
+        boardRepository.deleteById(id);
     }
 }
