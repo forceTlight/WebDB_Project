@@ -13,12 +13,5 @@ public class UserController {
         model.addAttribute("name", name);
         return "/greeting";
     }
-    @GetMapping("/index")
-    public String index(){
-        return "index";
-    }
-    @GetMapping("/board/list")
-    public String list(){
-        return "board/list";
-    }
+
 }

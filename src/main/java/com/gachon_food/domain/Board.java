@@ -1,18 +1,17 @@
 package com.gachon_food.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 @Builder
 @Entity
 public class Board {
@@ -20,12 +19,13 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int boardId;
 
-    @Column(length = 30,nullable = false)
+    @NotNull
+    @Size(min = 2, max = 10, message = "제목은 2자이상 30자 이하입니다.")
     private String title;
 
     @Lob
     @Column
-    private String Content;
+    private String content;
 
     @Column(length = 1)
     private String deleteYN;
