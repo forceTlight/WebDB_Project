@@ -18,11 +18,15 @@ public class AccountDto {
         private String email;
         private String password;
         private String password_confirm;
+        private String major;
+        private String name;
         @Builder
         public AccountRequestDto(String email, String password, String password_confirm){
             this.email = email;
             this.password = password;
             this.password_confirm = password_confirm;
+            this.major = major;
+            this.name = name;
         }
     }
 }

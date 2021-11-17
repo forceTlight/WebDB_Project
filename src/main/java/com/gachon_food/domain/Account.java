@@ -11,8 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,15 +27,8 @@ public class Account {
     @Column(length = 30, nullable = false, unique = true)
     private String email;
 
-    @Column(length = 30, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
-
-    @ManyToMany
-    @JoinTable(
-            name="account_role",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name="role_id"))
-    private List<Role> roles = new ArrayList<>();
 
     @Column(length = 30, nullable = false)
     private String major;
@@ -51,16 +42,19 @@ public class Account {
     @UpdateTimestamp
     private Timestamp updateDate;
 
-    public Account(AccountDto.AccountRequestDto accountRequestDto){
-        this.email = accountRequestDto.getEmail();
-        this.password = accountRequestDto.getPassword();
+    public Account(AccountDto.AccountRequestDto LoginFormDto){
+        this.email = LoginFormDto.getEmail();
+        this.password = LoginFormDto.getPassword();
+        this.major = LoginFormDto.getMajor();
+        this.name = LoginFormDto.getName();
     }
 
     @Builder
-    public Account(String email, String password, List<Role> roles){
+    public Account(String email, String password, String major){
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.major = major;
+        this.name = name;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder){

@@ -1,7 +1,7 @@
 package com.gachon_food.validator;
 
 import com.gachon_food.domain.Account;
-import com.gachon_food.dto.AccountDto;
+import com.gachon_food.dto.LoginFormDto;
 import com.gachon_food.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,24 +10,24 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class AccountValidator implements Validator {
+public class LoginValidator implements Validator {
     @Autowired
     private AccountRepository accountRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Account.class.equals(clazz);
+        return false;
     }
 
     @Override
     public void validate(Object obj, Errors errors) {
-        AccountDto.AccountRequestDto account = (AccountDto.AccountRequestDto) obj;
+        LoginFormDto login = (LoginFormDto)obj;
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if(!(account.getPassword().equals((account.getPassword_confirm())))){
-            // 비밀번호와 비밀번호 확인이 다르다면
-            errors.rejectValue("password", "key", "비밀번호가 일치하지 않습니다.");
-        }else if(accountRepository.findByEmail(account.getEmail()) != null){
-            errors.rejectValue("email", "key", "이미 사용자 이름이 존재합니다.");
+        Account account = accountRepository.findByEmail(login.getEmail()).get();
+        if(account == null){ // 아이디가 없다면
+            errors.rejectValue("email", "key", "아이디를 확인해주세요.");
+        }else if(!(passwordEncoder.matches(login.getPassword(), account.getPassword()))){ // 비밀번호가 틀리다면
+            errors.rejectValue("password", "key","비밀번호를 확인해주세요");
         }
     }
 }
