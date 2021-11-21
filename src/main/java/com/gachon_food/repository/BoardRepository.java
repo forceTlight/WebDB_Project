@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-
+/*
+Board Repository (저장소)
+ */
 public interface BoardRepository extends JpaRepository<Board, Integer> {
     List<Board> findByTitle(String title);
     List<Board> findByTitleOrContent(String title, String content);

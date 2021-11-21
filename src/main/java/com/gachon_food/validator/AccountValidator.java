@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+// 회원가입 관련 검증 클래스
 @Component
 public class AccountValidator implements Validator {
     @Autowired
@@ -26,7 +27,8 @@ public class AccountValidator implements Validator {
         if(!(account.getPassword().equals((account.getPassword_confirm())))){
             // 비밀번호와 비밀번호 확인이 다르다면
             errors.rejectValue("password", "key", "비밀번호가 일치하지 않습니다.");
-        }else if(accountRepository.findByEmail(account.getEmail()) != null){
+        } // 이미 존재하는 사용자 이름이라면
+        else if(accountRepository.findByEmail(account.getEmail()).isPresent()){
             errors.rejectValue("email", "key", "이미 사용자 이름이 존재합니다.");
         }
     }

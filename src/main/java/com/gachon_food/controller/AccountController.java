@@ -39,25 +39,7 @@ public class AccountController {
         return "/account/login";
     }
     /*
-     로그인 요청 (POST)
-     */
-    /*
-    @PostMapping("/login")
-    public String login(@Valid LoginFormDto loginFormDto, BindingResult bindingResult,
-                        HttpServletRequest request){
-        loginValidator.validate(loginFormDto, bindingResult);
-        System.out.println(bindingResult.hasErrors());
-        if(bindingResult.hasErrors()){
-            return "/account/login"; // 실패
-        }
-        // 로그인 성공 처리(세션적용)
-        Account account = loginService.login(loginFormDto.getEmail(), loginFormDto.getPassword());
-        HttpSession session = request.getSession();
-        session.setAttribute(Role.USER.getValue(), account);
-        return "redirect:/";
-    }*/
-    /*
-    로그이웃 요청(POST)
+    로그아웃 요청(POST)
      */
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);
@@ -66,7 +48,7 @@ public class AccountController {
         }
         return "redirect:/";
     }
-    /*
+        /*
     회원가입 화면 (GET)
      */
     @GetMapping("/register")

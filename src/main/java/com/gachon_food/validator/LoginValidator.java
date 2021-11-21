@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+// 로그인 관련 검증 클래스
 @Component
 public class LoginValidator implements Validator {
     @Autowired

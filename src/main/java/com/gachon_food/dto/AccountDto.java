@@ -2,7 +2,9 @@ package com.gachon_food.dto;
 
 import lombok.*;
 
-
+/*
+회원정보 DTO
+ */
 public class AccountDto {
 //    private int userId;
 //    private String name;

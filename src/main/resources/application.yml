@@ -1,7 +1,6 @@
 server:
   port: 8000
   servlet:
-    #context-path: /letseat
     encoding:
       charset: utf-8
       enabled: true
@@ -9,10 +8,10 @@ server:
 
 spring:
   mvc:
+    static-path-pattern: "/static/**"
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/gachon_food?serverTimezone=Asia/Seoul
@@ -33,3 +32,10 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+  thymeleaf:
+    prefix=classpath: templates/
+    suffix: .html
+    check-template-location: true
+    cache: false
+
+
